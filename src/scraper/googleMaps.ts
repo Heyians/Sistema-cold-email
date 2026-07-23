@@ -1,7 +1,8 @@
-import { chromium, type Browser, type Page } from "playwright";
+import type { Browser, Page } from "playwright";
 import { logger } from "../utils/logger.js";
 import { jitterSleep } from "../utils/sleep.js";
 import type { RawMapsListing } from "../types.js";
+import { launchChromium } from "./browser.js";
 
 /**
  * NOTA IMPORTANTE:
@@ -162,7 +163,7 @@ export async function scrapeGoogleMaps(
   const results: RawMapsListing[] = [];
 
   try {
-    browser = await chromium.launch({ headless });
+    browser = await launchChromium(headless);
     const context = await browser.newContext({
       locale: "pt-BR",
       viewport: { width: 1366, height: 900 },

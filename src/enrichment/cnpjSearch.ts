@@ -1,7 +1,7 @@
-import { chromium } from "playwright";
 import { logger } from "../utils/logger.js";
 import { jitterSleep } from "../utils/sleep.js";
 import { isValidCnpj, onlyDigits } from "./cnpjValidation.js";
+import { launchChromium } from "../scraper/browser.js";
 
 const CNPJ_PATTERN = /\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}/g;
 
@@ -22,7 +22,7 @@ export async function searchCnpjByName(
 ): Promise<string | null> {
   const query = `"${companyName}" ${city} CNPJ`;
 
-  const browser = await chromium.launch({ headless: true });
+  const browser = await launchChromium(true);
   try {
     const context = await browser.newContext({
       locale: "pt-BR",
