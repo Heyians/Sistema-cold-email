@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{BUSINESS_NAME}}</title>
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  :root {
+    --accent: #1f6f4a;
+    --accent-dark: #14492f;
+    --bg: #faf9f6;
+    --text: #24291f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.55;
+  }
+  header.hero {
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: #fff;
+    padding: 72px 24px 88px;
+    text-align: center;
+  }
+  header.hero .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 13px;
+    opacity: 0.85;
+    margin-bottom: 12px;
+  }
+  header.hero h1 {
+    font-size: clamp(28px, 5vw, 44px);
+    margin: 0 0 12px;
+  }
+  header.hero p.subtitle {
+    font-size: 18px;
+    opacity: 0.92;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  main {
+    max-width: 880px;
+    margin: -48px auto 0;
+    padding: 0 24px 64px;
+  }
+  section.card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 36px;
+    margin-bottom: 24px;
+    box-shadow: 0 12px 32px rgba(20, 30, 20, 0.08);
+  }
+  section.card h2 {
+    margin-top: 0;
+    font-size: 22px;
+    color: var(--accent-dark);
+  }
+  ul.highlights {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  ul.highlights li {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-weight: 500;
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .contact-grid div strong {
+    display: block;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b7263;
+    margin-bottom: 4px;
+  }
+  .cta {
+    text-align: center;
+    padding: 40px 24px;
+  }
+  .cta a.button {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  footer {
+    text-align: center;
+    padding: 28px 24px 48px;
+    font-size: 13px;
+    color: #6b7263;
+  }
+  footer a { color: var(--accent-dark); }
+  .banner {
+    background: #fff7e6;
+    border: 1px solid #f0d9a6;
+    color: #6b4e0e;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 14px;
+    max-width: 880px;
+    margin: 24px auto 0;
+  }
+</style>
+</head>
+<body>
+  <div class="banner">
+    Este e' um site-modelo criado pela <strong>Pindo</strong> como demonstracao para {{BUSINESS_NAME}}.
+    Ainda nao esta associado a nenhum dominio proprio da empresa.
+  </div>
+
+  <header class="hero">
+    <div class="eyebrow">{{CATEGORY}} - {{CITY}}</div>
+    <h1>{{BUSINESS_NAME}}</h1>
+    <p class="subtitle">{{TAGLINE}}</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Sobre</h2>
+      <p>{{ABOUT_TEXT}}</p>
+    </section>
+
+    <section class="card">
+      <h2>Por que ter esse site</h2>
+      <ul class="highlights">
+        <li>Facil de encontrar no Google e no celular</li>
+        <li>Passa confianca antes do primeiro contato</li>
+        <li>Botao direto de WhatsApp para orcamento</li>
+        <li>Endereco, horario e telefone sempre visiveis</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Contato</h2>
+      <div class="contact-grid">
+        <div>
+          <strong>Endereco</strong>
+          {{ADDRESS}}
+        </div>
+        <div>
+          <strong>Telefone</strong>
+          {{PHONE}}
+        </div>
+        <div>
+          <strong>WhatsApp</strong>
+          <a href="{{WHATSAPP_LINK}}">Conversar agora</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <a class="button" href="{{PINDO_WEBSITE}}">Quero um site assim para minha empresa</a>
+    </section>
+  </main>
+
+  <footer>
+    Site-modelo gerado por <a href="{{PINDO_WEBSITE}}">Pindo</a> &mdash; criacao de sites e cold email para pequenos negocios.
+  </footer>
+</body>
+</html>

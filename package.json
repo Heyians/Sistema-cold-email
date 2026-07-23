@@ -1,0 +1,29 @@
+{
+  "name": "pindo-cold-email",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sistema de prospeccao e cold email da Pindo: busca empresas sem site no Google Maps, enriquece contato via CNPJ e envia propostas de site + servicos de cold email.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/cli.ts",
+    "start": "node dist/cli.js",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/**/*.test.ts"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.5",
+    "nodemailer": "^9.0.3",
+    "playwright": "^1.47.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "@types/nodemailer": "^6.4.16",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
+  }
+}
