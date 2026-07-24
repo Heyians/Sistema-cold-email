@@ -80,6 +80,16 @@ function formatAddress(tags: Record<string, string>): string | null {
   return parts.length > 0 ? parts.join(" - ") : null;
 }
 
+const PUBLIC_FACILITY_NAME_PATTERN =
+  /\b(UBS|UPA|AMA|CAPS|CEO|pronto[ -]atendimento|hospital municipal|hospital estadual|posto de sa[uú]de|policlinica municipal|secretaria (municipal|estadual) de sa[uú]de)\b/i;
+
+/** Pindo vende site + cold email para negocios privados — nao faz sentido prospectar um servico publico de saude. */
+function isPublicHealthFacility(name: string, email: string | null): boolean {
+  if (email && /\.gov\.br$/i.test(email)) return true;
+  if (PUBLIC_FACILITY_NAME_PATTERN.test(name)) return true;
+  return false;
+}
+
 function elementToListing(el: OverpassElement, categoryLabel: string): RawMapsListing | null {
   const tags = el.tags ?? {};
   const name = tags.name;
@@ -88,6 +98,8 @@ function elementToListing(el: OverpassElement, categoryLabel: string): RawMapsLi
   const website = tags.website ?? tags["contact:website"] ?? null;
   const phone = tags.phone ?? tags["contact:phone"] ?? null;
   const email = tags.email ?? tags["contact:email"] ?? null;
+
+  if (isPublicHealthFacility(name, email)) return null;
 
   return {
     name,

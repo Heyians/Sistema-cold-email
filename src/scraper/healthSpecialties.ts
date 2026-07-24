@@ -85,6 +85,49 @@ export const HEALTH_SPECIALTIES: Record<string, SpecialtyDef> = {
     label: "Veterinario",
     filters: [{ key: "amenity", value: "veterinary" }],
   },
+  urologista: {
+    label: "Urologista",
+    filters: [{ key: "healthcare:speciality", value: "urology" }],
+  },
+  endocrinologista: {
+    label: "Endocrinologista",
+    filters: [{ key: "healthcare:speciality", value: "endocrinology" }],
+  },
+  reumatologista: {
+    label: "Reumatologista",
+    filters: [{ key: "healthcare:speciality", value: "rheumatology" }],
+  },
+  geriatra: {
+    label: "Geriatra",
+    filters: [{ key: "healthcare:speciality", value: "geriatrics" }],
+  },
+  otorrinolaringologista: {
+    label: "Otorrinolaringologista",
+    filters: [{ key: "healthcare:speciality", value: "otolaryngology" }],
+  },
+  neurologista: {
+    label: "Neurologista",
+    filters: [{ key: "healthcare:speciality", value: "neurology" }],
+  },
+  obstetra: {
+    label: "Obstetra",
+    filters: [{ key: "healthcare:speciality", value: "obstetrics" }],
+  },
+  fonoaudiologo: {
+    label: "Fonoaudiologo",
+    filters: [{ key: "healthcare:speciality", value: "speech_therapist" }],
+  },
+  clinica: {
+    label: "Clinica",
+    filters: [
+      { key: "amenity", value: "clinic" },
+      { key: "healthcare", value: "clinic" },
+    ],
+  },
+  laboratorio: {
+    label: "Laboratorio",
+    filters: [{ key: "healthcare", value: "laboratory" }],
+  },
 };
 
 export function resolveSpecialty(term: string): SpecialtyDef | null {
