@@ -4,173 +4,324 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{{BUSINESS_NAME}}</title>
+<meta name="description" content="{{TAGLINE}}" />
 <meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
-  :root {
-    --accent: #1f6f4a;
-    --accent-dark: #14492f;
-    --bg: #faf9f6;
-    --text: #24291f;
+  :root{
+    --cream:#F6F5F1; --cream-2:#ECE8E0; --white:#fff;
+    --ink:#12211B; --ink-2:#3E4F46; --mut:#6E7D74; --mut-2:#9AA79E;
+    --stone:#E4E1D8; --stone-2:#D6D2C6;
+    --accent:#1F6F4A; --accent-d:#154A31;
+    --lime:#D7EC5E; --lime-d:#7C8F1E;
+    --coral:#FF7A59; --coral-d:#D65C3E;
+    --r-xl:32px; --r-lg:24px; --r-md:16px; --r-sm:10px;
+    --sh:0 24px 60px -32px rgba(18,33,27,.30);
+    --sh-sm:0 12px 28px -18px rgba(18,33,27,.22);
+    --maxw:1120px; --ease:cubic-bezier(.6,.01,.05,1);
   }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: var(--text);
-    background: var(--bg);
-    line-height: 1.55;
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Manrope',system-ui,sans-serif;background:var(--cream);color:var(--ink);
+    -webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:clip;letter-spacing:-.01em}
+  a{text-decoration:none;color:inherit} ul{list-style:none}
+  img{max-width:100%;display:block}
+  .wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  h1,h2,h3{font-weight:700;letter-spacing:-.03em;line-height:1.05}
+  .hl{color:var(--accent-d)}
+  .hl.on-dark{color:var(--lime)}
+
+  /* disclosure pill */
+  .disclosure{background:var(--ink);color:var(--cream)}
+  .disclosure .wrap{display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 24px;font-size:12.5px;font-weight:500;text-align:center;flex-wrap:wrap}
+  .disclosure b{font-weight:700}
+  .disclosure a{text-decoration:underline;color:var(--lime)}
+
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:'Manrope';font-weight:700;font-size:15px;border:none;cursor:pointer;
+    padding:14px 15px 14px 22px;border-radius:999px;transition:.22s var(--ease);white-space:nowrap}
+  .btn .ar{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;flex:none;transition:.22s var(--ease)}
+  .btn-dark{background:var(--ink);color:var(--cream)} .btn-dark:hover{background:var(--accent-d)} .btn-dark .ar{background:rgba(255,255,255,.16)}
+  .btn-accent{background:var(--accent);color:#fff} .btn-accent:hover{background:var(--accent-d)} .btn-accent .ar{background:rgba(255,255,255,.2)}
+  .btn-lime{background:var(--lime);color:var(--ink)} .btn-lime:hover{background:#c3d94a} .btn-lime .ar{background:rgba(18,33,27,.12)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--stone-2);padding:12.5px 20px}
+  .btn-ghost:hover{border-color:var(--ink)}
+
+  /* nav */
+  header{position:sticky;top:0;z-index:90;padding:16px 0;background:rgba(246,245,241,.85);backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:.25s}
+  header.scrolled{border-color:var(--stone)}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:18px;min-width:0}
+  .brand .mono{width:38px;height:38px;border-radius:11px;background:var(--ink);color:var(--lime);display:grid;place-items:center;font-weight:800;font-size:16px;flex:none}
+  .brand span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-links{display:flex;gap:28px;font-size:14.5px;font-weight:600}
+  .nav-links a{color:var(--ink-2)} .nav-links a:hover{color:var(--ink)}
+  @media(max-width:760px){.nav-links{display:none}}
+
+  /* hero */
+  .hero{padding:56px 0 40px}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--stone);border-radius:999px;padding:7px 15px 7px 13px;font-size:13px;font-weight:700;color:var(--ink-2)}
+  .eyebrow .d{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .hero h1{font-size:clamp(32px,4.6vw,52px);margin-top:20px}
+  .hero .lead{font-size:17px;color:var(--ink-2);margin-top:18px;max-width:480px;line-height:1.6}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+  .hero-bullets{display:flex;flex-direction:column;gap:10px;margin-top:34px}
+  .hero-bullets .b{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--ink-2)}
+  .hero-bullets .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
+
+  /* hero visual (no real photos: solid-color card + monogram + floating badges) */
+  .hero-vis{position:relative;display:flex;justify-content:center}
+  .hcard{position:relative;width:100%;max-width:340px;aspect-ratio:4/5;background:var(--accent);border-radius:var(--r-xl);box-shadow:var(--sh);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#fff;padding:32px;text-align:center}
+  .hcard .big-mono{width:104px;height:104px;border-radius:32px;background:rgba(255,255,255,.14);display:grid;place-items:center;font-size:42px;font-weight:800;color:var(--lime)}
+  .hcard .hc-name{font-size:20px;font-weight:800;letter-spacing:-.02em}
+  .hcard .hc-cat{font-size:13.5px;font-weight:600;color:rgba(255,255,255,.78)}
+  .fbadge{position:absolute;display:inline-flex;align-items:center;gap:9px;background:#fff;color:var(--ink);font-size:13px;font-weight:700;
+    padding:10px 16px 10px 10px;border-radius:999px;box-shadow:var(--sh-sm);white-space:nowrap;animation:floatY 4.6s ease-in-out infinite}
+  .fbadge .ic{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;flex:none;color:#fff}
+  .fbadge.b1{top:-14px;left:-8px;background:var(--lime);animation-delay:.2s}
+  .fbadge.b1 .ic{background:var(--ink);color:var(--lime)}
+  .fbadge.b2{bottom:18px;right:-22px;animation-delay:1s}
+  .fbadge.b2 .ic{background:var(--accent)}
+  @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  @media(prefers-reduced-motion:reduce){.fbadge{animation:none}}
+  @media(max-width:920px){
+    .hero-grid{grid-template-columns:1fr;text-align:center}
+    .hero .lead{margin-left:auto;margin-right:auto}
+    .hero-cta,.hero-bullets{justify-content:center;align-items:center}
+    .hero-vis{margin-top:12px}
+    .fbadge.b2{right:8px}
   }
-  header.hero {
-    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-    color: #fff;
-    padding: 72px 24px 88px;
-    text-align: center;
-  }
-  header.hero .eyebrow {
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 13px;
-    opacity: 0.85;
-    margin-bottom: 12px;
-  }
-  header.hero h1 {
-    font-size: clamp(28px, 5vw, 44px);
-    margin: 0 0 12px;
-  }
-  header.hero p.subtitle {
-    font-size: 18px;
-    opacity: 0.92;
-    max-width: 640px;
-    margin: 0 auto;
-  }
-  main {
-    max-width: 880px;
-    margin: -48px auto 0;
-    padding: 0 24px 64px;
-  }
-  section.card {
-    background: #fff;
-    border-radius: 16px;
-    padding: 36px;
-    margin-bottom: 24px;
-    box-shadow: 0 12px 32px rgba(20, 30, 20, 0.08);
-  }
-  section.card h2 {
-    margin-top: 0;
-    font-size: 22px;
-    color: var(--accent-dark);
-  }
-  ul.highlights {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-  }
-  ul.highlights li {
-    background: var(--bg);
-    border-radius: 12px;
-    padding: 16px 18px;
-    font-weight: 500;
-  }
-  .contact-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-  }
-  .contact-grid div strong {
-    display: block;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #6b7263;
-    margin-bottom: 4px;
-  }
-  .cta {
-    text-align: center;
-    padding: 40px 24px;
-  }
-  .cta a.button {
-    display: inline-block;
-    background: var(--accent);
-    color: #fff;
-    padding: 14px 28px;
-    border-radius: 999px;
-    text-decoration: none;
-    font-weight: 600;
-  }
-  footer {
-    text-align: center;
-    padding: 28px 24px 48px;
-    font-size: 13px;
-    color: #6b7263;
-  }
-  footer a { color: var(--accent-dark); }
-  .banner {
-    background: #fff7e6;
-    border: 1px solid #f0d9a6;
-    color: #6b4e0e;
-    border-radius: 12px;
-    padding: 14px 20px;
-    font-size: 14px;
-    max-width: 880px;
-    margin: 24px auto 0;
-  }
+
+  /* generic section */
+  section{padding:80px 0}
+  .head{max-width:640px}
+  .head.center{margin:0 auto;text-align:center}
+  .head h2{font-size:clamp(28px,4vw,42px)}
+  .head p{font-size:16px;color:var(--ink-2);margin-top:14px;line-height:1.6}
+
+  /* feature cards */
+  .feat3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
+  .fc{border-radius:var(--r-lg);padding:28px;background:var(--white);border:1px solid var(--stone)}
+  .fc .ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;color:var(--ink);margin-bottom:20px}
+  .fc.a .ic{background:var(--lime)} .fc.b .ic{background:#CFE4DA} .fc.c .ic{background:#FFD9CC}
+  .fc h4{font-size:19px;font-weight:700;letter-spacing:-.02em}
+  .fc p{font-size:14.5px;color:var(--ink-2);margin-top:9px;line-height:1.55}
+  @media(max-width:820px){.feat3{grid-template-columns:1fr}}
+
+  /* dark band: jornada do paciente */
+  .journey{background:var(--ink);color:var(--cream);border-radius:var(--r-xl);margin:0 16px}
+  .journey .head h2{color:var(--cream)}
+  .journey .head p{color:var(--mut-2)}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:44px}
+  .step{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-lg);padding:26px}
+  .step .sn{width:38px;height:38px;border-radius:11px;background:var(--lime);color:var(--ink);display:grid;place-items:center;font-weight:800;font-size:15px;margin-bottom:20px}
+  .step h4{font-size:16.5px;font-weight:700;letter-spacing:-.01em;color:var(--cream)}
+  .step p{font-size:13.5px;color:var(--mut-2);margin-top:8px;line-height:1.5}
+  @media(max-width:920px){.steps{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.steps{grid-template-columns:1fr}}
+
+  /* contact */
+  .contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
+  .ccard{background:var(--white);border:1px solid var(--stone);border-radius:var(--r-lg);padding:26px;display:flex;flex-direction:column;gap:12px}
+  .ccard .ic{width:42px;height:42px;border-radius:12px;background:var(--cream-2);color:var(--accent-d);display:grid;place-items:center}
+  .ccard b{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);font-weight:700}
+  .ccard .val{font-size:15.5px;font-weight:700;color:var(--ink);line-height:1.4}
+  .ccard a.val:hover{color:var(--accent-d)}
+  @media(max-width:820px){.contact-grid{grid-template-columns:1fr}}
+
+  /* final cta */
+  .cta-band{background:var(--accent);border-radius:var(--r-xl);margin:0 16px;padding:64px 40px;text-align:center;color:#fff}
+  .cta-band h2{font-size:clamp(28px,4.6vw,44px);color:#fff}
+  .cta-band p{font-size:16px;color:rgba(255,255,255,.85);margin:14px auto 0;max-width:480px}
+  .cta-band .hero-cta{justify-content:center;margin-top:30px}
+  .cta-band .btn-ghost{border-color:rgba(255,255,255,.4);color:#fff}
+  .cta-band .btn-ghost:hover{border-color:#fff}
+
+  footer{padding:40px 24px 48px;text-align:center;font-size:13px;color:var(--mut)}
+  footer a{color:var(--accent-d);font-weight:700}
+
+  /* reveal on scroll */
+  .rv{opacity:0;transform:translateY(22px);transition:.6s var(--ease)}
+  .rv.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-  <div class="banner">
-    Este e' um site-modelo criado pela <strong>Pindo</strong> como demonstracao para {{BUSINESS_NAME}}.
-    Ainda nao esta associado a nenhum dominio proprio da empresa.
+
+<div class="disclosure">
+  <div class="wrap"><span>Prévia criada pela <b>Pindó</b> para {{BUSINESS_NAME}} — ainda não é o site oficial da empresa. <a href="{{PINDO_WEBSITE}}">Saiba mais</a></span></div>
+</div>
+
+<header id="header">
+  <div class="wrap nav">
+    <a href="#" class="brand"><span class="mono">{{BUSINESS_INITIAL}}</span><span>{{BUSINESS_NAME}}</span></a>
+    <ul class="nav-links">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#diferenciais">Diferenciais</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    <a href="{{WHATSAPP_LINK}}" class="btn btn-accent"><span>WhatsApp</span><span class="ar"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
   </div>
+</header>
 
-  <header class="hero">
-    <div class="eyebrow">{{CATEGORY}} - {{CITY}}</div>
-    <h1>{{BUSINESS_NAME}}</h1>
-    <p class="subtitle">{{TAGLINE}}</p>
-  </header>
-
-  <main>
-    <section class="card">
-      <h2>Sobre</h2>
-      <p>{{ABOUT_TEXT}}</p>
-    </section>
-
-    <section class="card">
-      <h2>Por que ter esse site</h2>
-      <ul class="highlights">
-        <li>Facil de encontrar no Google e no celular</li>
-        <li>Passa confianca antes do primeiro contato</li>
-        <li>Botao direto de WhatsApp para orcamento</li>
-        <li>Endereco, horario e telefone sempre visiveis</li>
-      </ul>
-    </section>
-
-    <section class="card">
-      <h2>Contato</h2>
-      <div class="contact-grid">
-        <div>
-          <strong>Endereco</strong>
-          {{ADDRESS}}
-        </div>
-        <div>
-          <strong>Telefone</strong>
-          {{PHONE}}
-        </div>
-        <div>
-          <strong>WhatsApp</strong>
-          <a href="{{WHATSAPP_LINK}}">Conversar agora</a>
-        </div>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="rv">
+      <span class="eyebrow"><span class="d"></span>{{CATEGORY}} · {{CITY}}</span>
+      {{HERO_HEADLINE_HTML}}
+      <p class="lead">{{TAGLINE}}</p>
+      <div class="hero-cta">
+        <a href="{{WHATSAPP_LINK}}" class="btn btn-dark"><span>Falar no WhatsApp</span><span class="ar"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+        <a href="#diferenciais" class="btn btn-ghost">Ver diferenciais</a>
       </div>
-    </section>
+      <div class="hero-bullets">
+        <div class="b"><span class="dot"></span>{{HERO_BULLET_1}}</div>
+        <div class="b"><span class="dot"></span>{{HERO_BULLET_2}}</div>
+        <div class="b"><span class="dot"></span>{{HERO_BULLET_3}}</div>
+      </div>
+    </div>
+    <div class="hero-vis rv">
+      <div class="hcard">
+        <div class="big-mono">{{BUSINESS_INITIAL}}</div>
+        <div class="hc-name">{{BUSINESS_NAME}}</div>
+        <div class="hc-cat">{{CATEGORY}}</div>
+        <span class="fbadge b1"><span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg></span>Resposta rápida no WhatsApp</span>
+        <span class="fbadge b2"><span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg></span>Fácil de encontrar no Google</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section class="cta">
-      <a class="button" href="{{PINDO_WEBSITE}}">Quero um site assim para minha empresa</a>
-    </section>
-  </main>
+<section id="sobre">
+  <div class="wrap">
+    <div class="head rv">
+      <span class="eyebrow"><span class="d"></span>sobre</span>
+      <h2 style="margin-top:16px">Por que ter <span class="hl">esse site</span></h2>
+      <p>{{ABOUT_TEXT}}</p>
+    </div>
+    <div class="feat3">
+      <div class="fc a rv">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg></div>
+        <h4>Encontrado no Google</h4>
+        <p>Quem pesquisa por {{CATEGORY_LOWER}} em {{CITY}} encontra vocês primeiro — não só o concorrente que já tem site.</p>
+      </div>
+      <div class="fc b rv">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3z"/></svg></div>
+        <h4>Confiança à primeira vista</h4>
+        <p>Endereço, telefone e horário sempre visíveis. Antes de ligar, quem procura já sabe o que esperar.</p>
+      </div>
+      <div class="fc c rv">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg></div>
+        <h4>Contato em 1 clique</h4>
+        <p>Botão de WhatsApp direto na página. Sem formulário, sem enrolação — a conversa começa na hora.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <footer>
-    Site-modelo gerado por <a href="{{PINDO_WEBSITE}}">Pindo</a> &mdash; criacao de sites e cold email para pequenos negocios.
-  </footer>
+<section class="journey" id="diferenciais">
+  <div class="wrap">
+    <div class="head center rv">
+      <span class="eyebrow" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);color:var(--cream)"><span class="d" style="background:var(--lime)"></span>como fica na prática</span>
+      <h2 style="margin-top:16px">O que muda no dia a dia</h2>
+      <p>Do primeiro clique no Google até a consulta marcada.</p>
+    </div>
+    <div class="steps">
+      <div class="step rv">
+        <div class="sn">01</div>
+        <h4>Pesquisa no Google</h4>
+        <p>Alguém busca "{{CATEGORY_LOWER}} perto de mim" ou o nome de vocês.</p>
+      </div>
+      <div class="step rv">
+        <div class="sn">02</div>
+        <h4>Encontra o site</h4>
+        <p>Vê o que vocês fazem, endereço e horário em poucos segundos.</p>
+      </div>
+      <div class="step rv">
+        <div class="sn">03</div>
+        <h4>Chama no WhatsApp</h4>
+        <p>Um botão leva direto pra conversa — sem precisar ligar.</p>
+      </div>
+      <div class="step rv">
+        <div class="sn">04</div>
+        <h4>Vocês confirmam</h4>
+        <p>Respondem no seu tempo e fecham o agendamento.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contato">
+  <div class="wrap">
+    <div class="head rv">
+      <span class="eyebrow"><span class="d"></span>contato</span>
+      <h2 style="margin-top:16px">Fale com a <span class="hl">{{BUSINESS_NAME}}</span></h2>
+    </div>
+    <div class="contact-grid">
+      <div class="ccard rv">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3z"/></svg></div>
+        <b>Endereço</b>
+        <span class="val">{{ADDRESS}}</span>
+      </div>
+      <div class="ccard rv">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <b>Telefone</b>
+        <span class="val">{{PHONE}}</span>
+      </div>
+      <div class="ccard rv">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg></div>
+        <b>WhatsApp</b>
+        <a class="val" href="{{WHATSAPP_LINK}}">Conversar agora →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta-band rv">
+      <h2>Gostou do que viu?</h2>
+      <p>Esse foi só um exemplo rápido. Um site de verdade pode ficar no ar em poucos dias — com domínio próprio e do jeito que a {{BUSINESS_NAME}} precisar.</p>
+      <div class="hero-cta">
+        <a href="{{PINDO_WEBSITE}}" class="btn btn-lime"><span>Quero um site assim</span><span class="ar"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Site-modelo gerado por <a href="{{PINDO_WEBSITE}}">Pindó</a> — criação de sites e cold email para pequenos negócios.
+</footer>
+
+<script>
+(function(){
+  var header = document.getElementById('header');
+  window.addEventListener('scroll', function(){
+    if (window.scrollY > 8) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  }, { passive: true });
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.rv');
+  if (reduced || !('IntersectionObserver' in window)) {
+    els.forEach(function(el){ el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  els.forEach(function(el){ io.observe(el); });
+})();
+</script>
+
 </body>
 </html>
