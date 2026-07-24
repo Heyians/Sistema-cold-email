@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script>document.documentElement.classList.add('js');</script>
 <style>
   :root{
     --cream:#F6F5F1; --cream-2:#ECE8E0; --white:#fff;
@@ -144,8 +145,10 @@
   footer{padding:40px 24px 48px;text-align:center;font-size:13px;color:var(--mut)}
   footer a{color:var(--accent-d);font-weight:700}
 
-  /* reveal on scroll */
-  .rv{opacity:0;transform:translateY(22px);transition:.6s var(--ease)}
+  /* reveal on scroll — so' aplica opacidade zero se o JS confirmou que vai rodar
+     (classe .js no <html>, adicionada por um script sincrono no <head>).
+     Sem JS (ex: preview que bloqueia <script>), o conteudo fica sempre visivel. */
+  .js .rv{opacity:0;transform:translateY(22px);transition:.6s var(--ease)}
   .rv.in{opacity:1;transform:none}
   @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}}
 </style>
@@ -299,27 +302,38 @@
 
 <script>
 (function(){
-  var header = document.getElementById('header');
-  window.addEventListener('scroll', function(){
-    if (window.scrollY > 8) header.classList.add('scrolled');
-    else header.classList.remove('scrolled');
-  }, { passive: true });
-
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var els = document.querySelectorAll('.rv');
-  if (reduced || !('IntersectionObserver' in window)) {
-    els.forEach(function(el){ el.classList.add('in'); });
-    return;
+  function revealAll(){ els.forEach(function(el){ el.classList.add('in'); }); }
+  // Rede de seguranca: se qualquer coisa abaixo falhar ou nao rodar a tempo,
+  // o conteudo aparece de qualquer jeito depois de 2s.
+  var safety = setTimeout(revealAll, 2000);
+
+  try {
+    var header = document.getElementById('header');
+    window.addEventListener('scroll', function(){
+      if (window.scrollY > 8) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    }, { passive: true });
+
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || !('IntersectionObserver' in window)) {
+      clearTimeout(safety);
+      revealAll();
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    els.forEach(function(el){ io.observe(el); });
+  } catch (e) {
+    clearTimeout(safety);
+    revealAll();
   }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in');
-        io.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
-  els.forEach(function(el){ io.observe(el); });
 })();
 </script>
 
