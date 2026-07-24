@@ -1,10 +1,29 @@
 # Sistema Cold Email — Pindo
 
-Sistema de prospeccao para a Pindo: busca empresas no Google Maps que ainda
-nao tem site, tenta descobrir o email de contato (via bases de CNPJ),
-gera e publica um site-modelo de demonstracao para cada lead, e envia um
-cold email oferecendo os servicos da Pindo (criacao de site + cold email
-como servico).
+Sistema de prospeccao para a Pindo: busca empresas que ainda nao tem site,
+tenta descobrir o email de contato, gera e publica um site-modelo de
+demonstracao para cada lead, e monta um cold email oferecendo os servicos
+da Pindo (criacao de site + cold email como servico).
+
+## Fontes de busca
+
+Duas opcoes, escolhidas com `--source`:
+
+- **`osm` (padrao)** — usa dados abertos do OpenStreetMap (Overpass API +
+  Nominatim para geocodificar a cidade). Gratis, sem chave de API, e' uma
+  API de verdade feita para ser consultada (nao e' scraping), e funciona
+  em qualquer ambiente com HTTPS normal — inclusive em execucoes
+  automatizadas/hospedadas. Cobertura no Brasil e' geralmente menor que a
+  do Google Maps. O termo de busca (`--query`) precisa ser uma
+  especialidade mapeada em `src/scraper/healthSpecialties.ts` (dentista,
+  dermatologista, fisioterapeuta, psicologo, nutricionista, cardiologista,
+  ginecologista, pediatra, ortopedista, oftalmologista, psiquiatra,
+  "clinica geral", veterinario — adicione mais se precisar).
+- **`maps`** — abre o Google Maps de verdade via automacao de navegador
+  (Playwright). Cobertura melhor, mas so funciona com rede irrestrita (o
+  navegador nao passa por proxies HTTP/HTTPS restritivos) e viola os
+  Termos de Servico do Google — use com moderacao, fora de ambientes com
+  proxy/firewall na frente do navegador.
 
 ## Pipeline
 
@@ -12,17 +31,19 @@ como servico).
 search  -> enrich -> (import-emails, se precisar) -> sites -> compose -> send
 ```
 
-1. **search** — abre o Google Maps (via automacao de navegador/Playwright)
-   pesquisando `<termo> em <cidade>`, coleta nome, categoria, endereco,
-   telefone, avaliacoes e se ha site cadastrado. Empresas sem site viram
-   leads (`status: no_website`).
-2. **enrich** — para cada lead sem site, tenta achar o CNPJ pelo nome +
-   cidade e consulta bases publicas de CNPJ (BrasilAPI/ReceitaWS) para
+1. **search** — busca estabelecimentos (OSM ou Maps) e salva no "banco"
+   local (`data/leads.json`). Quando a fonte ja traz um email junto (ex:
+   tag `email`/`contact:email` do OSM), o lead ja nasce como
+   `email_ready`. O restante, sem site, vira `no_website`.
+2. **enrich** — para cada lead `no_website` sem email ainda, tenta achar o
+   CNPJ pelo nome + cidade (via navegador, ver `CNPJ_NAME_SEARCH_ENABLED`
+   abaixo) e consulta bases publicas de CNPJ (BrasilAPI/ReceitaWS) para
    pegar email, telefone, atividade (CNAE) e situacao cadastral.
    - Quem tem email vai para `email_ready`.
-   - Quem nao tem email no registro vai para `needs_manual_email` e e'
-     exportado em `data/exports/precisa_email_manual.csv` para
-     preenchimento manual (ou enriquecimento externo, ex: Hunter.io).
+   - Quem nao tem email (ou quando a busca por nome esta desativada) vai
+     para `needs_manual_email` e e' exportado em
+     `data/exports/precisa_email_manual.csv` para preenchimento manual
+     (ou enriquecimento externo, ex: Hunter.io).
 3. **import-emails** — reimporta a planilha depois de preenchida.
 4. **sites** — gera um site de uma pagina personalizado para o lead
    (nome, categoria, endereco, telefone/WhatsApp) e publica na Vercel
@@ -37,14 +58,14 @@ Rode tudo de uma vez (menos o envio) com:
 
 ```bash
 npm run build
-node dist/cli.js run --query "salao de beleza" --location "Porto Alegre, RS" --max 20
+node dist/cli.js run --source osm --query dentista --location "São Paulo, SP" --max 20
 node dist/cli.js send   # depois de revisar os emails compostos
 ```
 
 Ou em modo dev (sem build):
 
 ```bash
-npm run dev -- search --query "restaurantes" --location "Canoas, RS"
+npm run dev -- search --source osm --query dentista --location "São Paulo, SP"
 npm run dev -- enrich
 npm run dev -- sites
 npm run dev -- compose
@@ -57,6 +78,10 @@ npm run dev -- status
 Copie `.env.example` para `.env` e preencha:
 
 - `MAPS_QUERY` / `MAPS_LOCATION` / `MAPS_MAX_RESULTS` — busca padrao.
+- `CNPJ_NAME_SEARCH_ENABLED` — deixe `false` em ambientes sem navegador
+  com rede irrestrita (ex: sessoes hospedadas atras de proxy). Os leads
+  sem email vao direto pra planilha manual, sem tentar (e travar) a busca
+  via navegador.
 - `VERCEL_TOKEN` — token de https://vercel.com/account/tokens, para
   publicar os sites de preview de verdade. Sem ele, os sites so ficam
   salvos localmente (nao gera erro, so nao publica).
@@ -94,6 +119,12 @@ Copie `.env.example` para `.env` e preencha:
   ou `run` — apenas o comando `send` dispara emails de verdade. Revise
   `data/leads.json` (campos `emailSubject`/`emailBody`) antes de rodar
   `send`.
+- **`data/leads.json` e' versionado no git de proposito** (veja o
+  `.gitignore`), para o estado do funil sobreviver entre execucoes
+  automatizadas em sessoes/containers efemeros. Isso significa que nomes,
+  telefones e emails de empresas prospectadas ficam no historico do
+  repositorio — ok para dado B2B de estabelecimentos, mas vale saber
+  antes de automatizar.
 
 ## Estrutura
 

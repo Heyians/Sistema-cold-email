@@ -1,3 +1,4 @@
+import { config } from "../config.js";
 import { leadStore } from "../db/store.js";
 import { logger } from "../utils/logger.js";
 import type { Lead } from "../types.js";
@@ -15,7 +16,20 @@ export async function enrichLead(lead: Lead): Promise<Lead> {
     return lead;
   }
 
-  const cnpj = await searchCnpjByName(lead.name, lead.city ?? "");
+  if (!config.cnpj.nameSearchEnabled) {
+    return leadStore.update(lead.id, { status: "needs_manual_email" });
+  }
+
+  let cnpj: string | null;
+  try {
+    cnpj = await searchCnpjByName(lead.name, lead.city ?? "");
+  } catch (err) {
+    logger.warn(`Busca de CNPJ falhou para "${lead.name}" (sem navegador disponivel?):`, (err as Error).message);
+    return leadStore.update(lead.id, {
+      status: "needs_manual_email",
+      lastError: (err as Error).message,
+    });
+  }
   if (!cnpj) {
     return leadStore.update(lead.id, { status: "cnpj_not_found" });
   }

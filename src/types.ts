@@ -33,7 +33,7 @@ export interface Lead {
   cnpjSituacao: string | null;
 
   email: string | null;
-  emailSource: "cnpj_lookup" | "manual_csv" | null;
+  emailSource: "cnpj_lookup" | "manual_csv" | "source_tag" | null;
 
   previewSiteSlug: string | null;
   previewSiteUrl: string | null;
@@ -62,4 +62,6 @@ export interface RawMapsListing {
   reviewsCount: number | null;
   mapsUrl: string | null;
   website: string | null;
+  /** Email ja vindo da propria fonte (ex: tag do OSM), quando disponivel. */
+  email?: string | null;
 }

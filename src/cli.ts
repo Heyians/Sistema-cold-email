@@ -4,6 +4,7 @@ import { config } from "./config.js";
 import { leadStore } from "./db/store.js";
 import { logger } from "./utils/logger.js";
 import { scrapeGoogleMaps } from "./scraper/googleMaps.js";
+import { searchHealthBusinesses } from "./scraper/osmSearch.js";
 import { enrichAllPending } from "./enrichment/enrich.js";
 import { exportLeadsNeedingEmail, importManualEmails } from "./enrichment/csvFallback.js";
 import { publishSitesForReadyLeads } from "./site/publishSite.js";
@@ -17,31 +18,44 @@ program
   .name("pindo-cold-email")
   .description("Prospeccao de empresas sem site no Google Maps + cold email da Pindo");
 
+async function runSearch(opts: {
+  source: string;
+  query: string;
+  location: string;
+  max: string;
+  headed?: boolean;
+}) {
+  await leadStore.load();
+  const maxResults = parseInt(opts.max, 10);
+  const listings =
+    opts.source === "maps"
+      ? await scrapeGoogleMaps({
+          query: opts.query,
+          location: opts.location,
+          maxResults,
+          headless: !opts.headed,
+        })
+      : await searchHealthBusinesses(opts.query, opts.location, maxResults);
+
+  const [city, state] = String(opts.location).split(",").map((s: string) => s.trim());
+  let semSite = 0;
+  for (const listing of listings) {
+    const lead = leadStore.upsertFromMaps(listing, city ?? opts.location, state ?? "");
+    if (lead.status === "no_website") semSite++;
+  }
+  await leadStore.save();
+  logger.info(`Total coletado: ${listings.length}. Sem site (leads potenciais): ${semSite}.`);
+}
+
 program
   .command("search")
-  .description("Busca empresas no Google Maps e salva as que nao tem site")
-  .option("-q, --query <query>", "termo de busca (ex: 'salao de beleza')", config.maps.defaultQuery)
+  .description("Busca empresas e salva as que nao tem site (fonte padrao: OpenStreetMap, gratuita e automatizavel)")
+  .option("-s, --source <source>", "fonte dos dados: 'osm' (gratis, sem chave) ou 'maps' (Google Maps via navegador, exige rede sem proxy restritivo)", "osm")
+  .option("-q, --query <query>", "termo de busca. Para --source osm, use uma especialidade mapeada (dentista, dermatologista, etc)", config.maps.defaultQuery)
   .option("-l, --location <location>", "cidade/regiao (ex: 'Porto Alegre, RS')", config.maps.defaultLocation)
   .option("-n, --max <n>", "numero maximo de resultados", String(config.maps.maxResults))
-  .option("--headed", "abre o navegador visivel (util para depurar)", false)
-  .action(async (opts) => {
-    await leadStore.load();
-    const listings = await scrapeGoogleMaps({
-      query: opts.query,
-      location: opts.location,
-      maxResults: parseInt(opts.max, 10),
-      headless: !opts.headed,
-    });
-
-    const [city, state] = String(opts.location).split(",").map((s: string) => s.trim());
-    let semSite = 0;
-    for (const listing of listings) {
-      const lead = leadStore.upsertFromMaps(listing, city ?? opts.location, state ?? "");
-      if (lead.status === "no_website") semSite++;
-    }
-    await leadStore.save();
-    logger.info(`Total coletado: ${listings.length}. Sem site (leads potenciais): ${semSite}.`);
-  });
+  .option("--headed", "abre o navegador visivel (apenas --source maps)", false)
+  .action(runSearch);
 
 program
   .command("enrich")
@@ -115,17 +129,18 @@ program
 program
   .command("run")
   .description("Roda o pipeline completo ate compor os emails (busca -> enriquece -> gera sites -> compoe). NAO envia automaticamente — use 'send' depois de revisar.")
-  .option("-q, --query <query>", "termo de busca", config.maps.defaultQuery)
+  .option("-s, --source <source>", "fonte dos dados: 'osm' (gratis, sem chave) ou 'maps' (Google Maps via navegador)", "osm")
+  .option("-q, --query <query>", "termo de busca (para --source osm, use uma especialidade mapeada)", config.maps.defaultQuery)
   .option("-l, --location <location>", "cidade/regiao", config.maps.defaultLocation)
   .option("-n, --max <n>", "numero maximo de resultados", String(config.maps.maxResults))
   .action(async (opts) => {
     await leadStore.load();
 
-    const listings = await scrapeGoogleMaps({
-      query: opts.query,
-      location: opts.location,
-      maxResults: parseInt(opts.max, 10),
-    });
+    const maxResults = parseInt(opts.max, 10);
+    const listings =
+      opts.source === "maps"
+        ? await scrapeGoogleMaps({ query: opts.query, location: opts.location, maxResults })
+        : await searchHealthBusinesses(opts.query, opts.location, maxResults);
     const [city, state] = String(opts.location).split(",").map((s: string) => s.trim());
     for (const listing of listings) {
       leadStore.upsertFromMaps(listing, city ?? opts.location, state ?? "");

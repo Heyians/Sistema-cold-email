@@ -88,6 +88,8 @@ export class LeadStore {
       return updated;
     }
 
+    const hasEmailFromSource = !hasWebsite && Boolean(listing.email);
+
     const lead: Lead = {
       id,
       name: listing.name,
@@ -105,15 +107,15 @@ export class LeadStore {
       cnpjRazaoSocial: null,
       cnpjAtividade: null,
       cnpjSituacao: null,
-      email: null,
-      emailSource: null,
+      email: hasEmailFromSource ? listing.email! : null,
+      emailSource: hasEmailFromSource ? "source_tag" : null,
       previewSiteSlug: null,
       previewSiteUrl: null,
       previewSiteGeneratedAt: null,
       emailSubject: null,
       emailBody: null,
       emailComposedAt: null,
-      status: hasWebsite ? "skipped_has_website" : "no_website",
+      status: hasWebsite ? "skipped_has_website" : hasEmailFromSource ? "email_ready" : "no_website",
       unsubscribed: false,
       sentAt: null,
       attempts: 0,

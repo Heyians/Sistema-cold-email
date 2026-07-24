@@ -1,7 +1,10 @@
 node_modules/
 dist/
 .env
-data/*.json
 data/exports/
-!data/.gitkeep
+data/sites/
 *.log
+
+# data/leads.json E' rastreado de proposito: e' o estado dos leads
+# (funil de prospeccao), e precisa sobreviver entre execucoes
+# automatizadas/agendadas que rodam em sessoes/containers efemeros.

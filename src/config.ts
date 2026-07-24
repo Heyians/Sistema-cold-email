@@ -28,6 +28,8 @@ export const config = {
   cnpj: {
     provider: (str("CNPJ_LOOKUP_PROVIDER", "brasilapi") as "brasilapi" | "receitaws"),
     minDelayMs: num("CNPJ_LOOKUP_MIN_DELAY_MS", 1500),
+    /** Busca de CNPJ por nome usa navegador (Google Search). Desative em ambientes sem navegador/rede irrestrita. */
+    nameSearchEnabled: bool("CNPJ_NAME_SEARCH_ENABLED", true),
   },
   vercel: {
     token: str("VERCEL_TOKEN"),
