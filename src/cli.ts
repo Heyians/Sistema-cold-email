@@ -1,4 +1,19 @@
 #!/usr/bin/env node
+// O fetch nativo do Node (undici) ignora HTTPS_PROXY por padrao, e a flag que
+// resolve isso (NODE_USE_ENV_PROXY) so' tem efeito se ja' estiver no ambiente
+// ANTES do processo Node iniciar — setar process.env em runtime e' tarde
+// demais. Em vez de depender do operador lembrar disso toda vez (importante
+// para execucoes automatizadas), o proprio script se relanca com a env var
+// certa quando detecta um proxy configurado.
+if (!process.env.NODE_USE_ENV_PROXY && (process.env.HTTPS_PROXY || process.env.https_proxy)) {
+  const { spawnSync } = await import("node:child_process");
+  const result = spawnSync(process.execPath, process.argv.slice(1), {
+    stdio: "inherit",
+    env: { ...process.env, NODE_USE_ENV_PROXY: "1" },
+  });
+  process.exit(result.status ?? 1);
+}
+
 import { Command } from "commander";
 import { config } from "./config.js";
 import { leadStore } from "./db/store.js";

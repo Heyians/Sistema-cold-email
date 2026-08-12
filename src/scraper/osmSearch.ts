@@ -45,21 +45,37 @@ function buildQuery(filters: TagFilter[], bbox: BoundingBox, maxResults: number)
   return `[out:json][timeout:40];\n(\n${clauses}\n);\nout body ${maxResults};`;
 }
 
-async function runOverpassQuery(query: string, attempt = 1): Promise<OverpassElement[]> {
-  const res = await fetch(OVERPASS_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "text/plain",
-      Accept: "*/*",
-      "User-Agent": USER_AGENT,
-    },
-    body: query,
-  });
+const MAX_OVERPASS_ATTEMPTS = 6;
 
-  const text = await res.text();
+async function runOverpassQuery(query: string, attempt = 1): Promise<OverpassElement[]> {
+  let res: Response;
+  let text: string;
+  try {
+    res = await fetch(OVERPASS_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain",
+        Accept: "*/*",
+        "User-Agent": USER_AGENT,
+      },
+      body: query,
+    });
+    text = await res.text();
+  } catch (err) {
+    if (attempt < MAX_OVERPASS_ATTEMPTS) {
+      const wait = 5000 * attempt;
+      logger.warn(
+        `Overpass API sem resposta (${(err as Error).message}), tentando de novo em ${wait}ms (tentativa ${attempt})...`
+      );
+      await sleep(wait);
+      return runOverpassQuery(query, attempt + 1);
+    }
+    throw new Error(`Overpass API indisponivel apos ${attempt} tentativas: ${(err as Error).message}`);
+  }
+
   if (!res.ok || text.trim().startsWith("<")) {
-    if (attempt < 3) {
-      const wait = 4000 * attempt;
+    if (attempt < MAX_OVERPASS_ATTEMPTS) {
+      const wait = 5000 * attempt;
       logger.warn(`Overpass API ocupada, tentando de novo em ${wait}ms (tentativa ${attempt})...`);
       await sleep(wait);
       return runOverpassQuery(query, attempt + 1);

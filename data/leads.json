@@ -629,7 +629,7 @@
   {
     "id": "664c0798c744f98a",
     "name": "Grupo D20",
-    "category": "Psicologo",
+    "category": "Fisioterapeuta",
     "address": "Rua Cláudio Soares, 72 - Pinheiros - São Paulo",
     "city": "São Paulo",
     "state": "SP",
@@ -657,12 +657,12 @@
     "attempts": 0,
     "lastError": null,
     "createdAt": "2026-07-24T03:34:20.930Z",
-    "updatedAt": "2026-07-24T03:34:28.636Z"
+    "updatedAt": "2026-08-12T22:18:45.994Z"
   },
   {
     "id": "750ef4d843bebc1e",
     "name": "Institut Long Tao",
-    "category": "Clinica geral",
+    "category": "Fisioterapeuta",
     "address": "Avenida Lino Jardim - Santo André",
     "city": "São Paulo",
     "state": "SP",
@@ -690,7 +690,7 @@
     "attempts": 0,
     "lastError": null,
     "createdAt": "2026-07-24T03:34:20.930Z",
-    "updatedAt": "2026-07-24T03:38:25.920Z"
+    "updatedAt": "2026-08-12T22:18:45.994Z"
   },
   {
     "id": "6c6fc69d313c078f",
@@ -723,7 +723,7 @@
     "attempts": 0,
     "lastError": null,
     "createdAt": "2026-07-24T03:34:20.930Z",
-    "updatedAt": "2026-07-24T03:34:20.930Z"
+    "updatedAt": "2026-08-12T22:18:45.994Z"
   },
   {
     "id": "3fae7d185fcb7794",
@@ -756,7 +756,7 @@
     "attempts": 0,
     "lastError": null,
     "createdAt": "2026-07-24T03:34:20.930Z",
-    "updatedAt": "2026-07-24T03:34:20.930Z"
+    "updatedAt": "2026-08-12T22:18:45.994Z"
   },
   {
     "id": "31ef033e6825b3c9",
@@ -789,7 +789,7 @@
     "attempts": 0,
     "lastError": null,
     "createdAt": "2026-07-24T03:34:20.930Z",
-    "updatedAt": "2026-07-24T03:34:20.930Z"
+    "updatedAt": "2026-08-12T22:18:45.995Z"
   },
   {
     "id": "cac4b3140f8b820b",
@@ -822,7 +822,7 @@
     "attempts": 0,
     "lastError": null,
     "createdAt": "2026-07-24T03:34:20.930Z",
-    "updatedAt": "2026-07-24T03:34:20.930Z"
+    "updatedAt": "2026-08-12T22:18:45.995Z"
   },
   {
     "id": "cd813382041d7926",
@@ -855,7 +855,7 @@
     "attempts": 0,
     "lastError": null,
     "createdAt": "2026-07-24T03:34:20.930Z",
-    "updatedAt": "2026-07-24T03:34:20.930Z"
+    "updatedAt": "2026-08-12T22:18:45.995Z"
   },
   {
     "id": "38ece2c65d107de2",
@@ -888,7 +888,7 @@
     "attempts": 0,
     "lastError": null,
     "createdAt": "2026-07-24T03:34:20.930Z",
-    "updatedAt": "2026-07-24T03:34:20.930Z"
+    "updatedAt": "2026-08-12T22:18:45.995Z"
   },
   {
     "id": "6938d4cb10db0063",
@@ -921,7 +921,7 @@
     "attempts": 0,
     "lastError": null,
     "createdAt": "2026-07-24T03:34:20.930Z",
-    "updatedAt": "2026-07-24T03:34:20.930Z"
+    "updatedAt": "2026-08-12T22:18:45.995Z"
   },
   {
     "id": "82e1c707d22855e5",
@@ -954,12 +954,12 @@
     "attempts": 0,
     "lastError": null,
     "createdAt": "2026-07-24T03:34:20.930Z",
-    "updatedAt": "2026-07-24T03:34:20.930Z"
+    "updatedAt": "2026-08-12T22:18:45.995Z"
   },
   {
     "id": "f3c84b2d09107cbd",
     "name": "CORD",
-    "category": "Clinica",
+    "category": "Fisioterapeuta",
     "address": "Avenida Dom Pedro II, 1240",
     "city": "São Paulo",
     "state": "SP",
@@ -987,7 +987,7 @@
     "attempts": 0,
     "lastError": null,
     "createdAt": "2026-07-24T03:34:20.930Z",
-    "updatedAt": "2026-07-24T03:44:14.713Z"
+    "updatedAt": "2026-08-12T22:18:45.995Z"
   },
   {
     "id": "18baecb209076f86",
